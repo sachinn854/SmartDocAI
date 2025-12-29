@@ -56,6 +56,134 @@ SmartDocAI is a modern, full-stack document intelligence platform that combines 
 - **Authentication**: JWT (python-jose)
 - **Deployment**: Hugging Face Spaces
 
+## 🔬 Technical Architecture & Workflow
+
+### 🏗️ System Architecture
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Frontend      │    │   Backend API   │    │   AI Services   │
+│   (React)       │◄──►│   (FastAPI)     │◄──►│   (ML Models)   │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+│                      │                      │
+├─ Modern UI           ├─ REST API            ├─ Document Processing
+├─ State Management    ├─ Authentication      ├─ AI Summarization  
+├─ Real-time Updates   ├─ File Upload         ├─ Vector Embeddings
+└─ Responsive Design   └─ Database ORM        └─ Q&A with RAG
+```
+
+### 🔄 Document Processing Pipeline
+
+#### Step 1: Document Upload & Extraction
+```python
+# Supported formats: PDF, DOCX, TXT
+Document Upload → Text Extraction → Content Cleaning
+```
+- **PDF**: `pdfplumber` for text extraction + `pdf2image` + `pytesseract` for OCR
+- **DOCX**: `python-docx` for structured text extraction
+- **TXT**: Direct UTF-8 text processing
+- **Cleaning**: Remove metadata, headers, footers, page numbers
+
+#### Step 2: AI-Powered Summarization
+```python
+# Hierarchical MAP-REDUCE approach
+Text Chunking → Individual Summaries → Merged Summaries
+```
+
+**Models Used:**
+- **Primary**: `google/flan-t5-small` (60MB, optimized for CPU)
+- **Fallback**: `t5-small` (242MB, higher quality)
+
+**Process:**
+1. **Text Chunking**: Smart chunking with 150-word chunks, 25-word overlap
+2. **MAP Phase**: Each chunk → 3-4 sentence summary using T5
+3. **REDUCE Phase**: Merge chunk summaries → Final summaries
+4. **Output**: 3 summary types (Short, Medium, Detailed)
+
+#### Step 3: Vector Embeddings & Indexing
+```python
+# Semantic search preparation
+Text Chunks → Embeddings → FAISS Index → Storage
+```
+
+**Models Used:**
+- **Primary**: `sentence-transformers/all-MiniLM-L6-v2` (80MB, fast)
+- **Alternative**: `sentence-transformers/all-mpnet-base-v2` (420MB, high quality)
+
+**Process:**
+1. **Chunking**: 300-word chunks with 80-word overlap for context
+2. **Embedding**: Convert chunks to 384/768-dimensional vectors
+3. **Indexing**: Store in FAISS for fast similarity search
+4. **Storage**: Persistent storage in `/data/index/`
+
+#### Step 4: Question Answering (RAG)
+```python
+# Retrieval-Augmented Generation
+Question → Similarity Search → Context Retrieval → Answer Generation
+```
+
+**Process:**
+1. **Query Embedding**: Convert question to vector using same model
+2. **Similarity Search**: FAISS cosine similarity search
+3. **Context Retrieval**: Get top-k most relevant chunks
+4. **Extractive QA**: Sentence-level extraction from retrieved chunks
+5. **Optional LLM**: T5-based answer refinement
+
+### 🧠 AI Models & Performance
+
+| Component | Model | Size | Purpose | Performance |
+|-----------|-------|------|---------|-------------|
+| **Summarization** | `flan-t5-small` | 60MB | Text summarization | ~2s per document |
+| **Embeddings** | `all-MiniLM-L6-v2` | 80MB | Semantic vectors | ~1s per document |
+| **Q&A** | `flan-t5-small` | 60MB | Answer generation | ~1s per question |
+| **OCR** | `tesseract-ocr` | 50MB | Image text extraction | ~3s per page |
+
+### 📊 Data Flow
+
+```mermaid
+graph TD
+    A[Document Upload] --> B[Text Extraction]
+    B --> C[Content Cleaning]
+    C --> D[Text Chunking]
+    D --> E[AI Summarization]
+    D --> F[Vector Embeddings]
+    F --> G[FAISS Indexing]
+    E --> H[Summary Storage]
+    G --> I[Ready for Q&A]
+    
+    J[User Question] --> K[Query Embedding]
+    K --> L[Similarity Search]
+    L --> M[Context Retrieval]
+    M --> N[Answer Extraction]
+    N --> O[Response to User]
+```
+
+### 🔐 Security & Authentication
+
+- **JWT Tokens**: Secure stateless authentication
+- **Password Hashing**: bcrypt with salt
+- **Rate Limiting**: API endpoint protection
+- **CORS**: Configured for secure cross-origin requests
+- **Input Validation**: Pydantic schemas for data validation
+
+### 💾 Data Storage
+
+```
+/data/
+├── uploads/           # User uploaded documents
+│   └── {user_id}/
+│       └── {doc_id}/
+│           ├── original.pdf
+│           ├── cleaned.txt
+│           └── summaries.json
+├── index/             # FAISS vector indexes
+│   └── {user_id}/
+│       └── {doc_id}/
+│           ├── chunks.json
+│           └── faiss.index
+└── smartdocai.db      # SQLite database
+```
+
 ## 📖 Quick Start Guide
 
 ### 1. Access the Application
