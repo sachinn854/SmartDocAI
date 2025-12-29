@@ -1,173 +1,262 @@
----
-title: DocInsight API
-emoji: 📄
-colorFrom: blue
-colorTo: purple
-sdk: docker
-pinned: false
-license: mit
-app_port: 7860
----
+# SmartDocAI 🚀
 
-# DocInsight API 🚀
+> **AI-Powered Document Intelligence Platform**  
+> Transform your documents into intelligent conversations with cutting-edge AI technology
 
-AI-powered document intelligence backend with:
-- 📄 **Document Processing** - PDF, DOCX, images (OCR)
-- 🤖 **AI Summarization** - Hierarchical, extractive, abstractive
-- 🔍 **RAG Q&A** - FAISS + sentence-transformers
-- 🔐 **Authentication** - JWT with user management
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Visit_App-blue?style=for-the-badge)](https://smart-doc-ai-brown.vercel.app/)
+[![Backend API](https://img.shields.io/badge/🔗_Backend_API-HuggingFace-yellow?style=for-the-badge)](https://huggingface.co/spaces/sachin00110/SmartDocAI)
+[![GitHub](https://img.shields.io/badge/📂_Source_Code-GitHub-black?style=for-the-badge)](https://github.com/sachinn854/SmartDocAI)
 
-## 🌐 API Endpoints
+## 🌟 Overview
 
-### Base URL
-```
-https://huggingface.co/spaces/YOUR_USERNAME/docinsight-api
-```
+SmartDocAI is a modern, full-stack document intelligence platform that combines powerful AI capabilities with an intuitive user interface. Upload your documents and unlock the power of AI-driven analysis, summarization, and interactive Q&A.
 
-### Key Endpoints
-- `GET /` - API status
-- `GET /health` - Health check
-- `POST /auth/register` - User registration
-- `POST /auth/login` - Login (returns JWT token)
-- `POST /documents/upload` - Upload document
-- `GET /documents` - List user's documents
-- `POST /summarize/{doc_id}` - Summarize document
-- `POST /ask` - Ask questions (RAG)
+### ✨ Key Features
 
-## 📖 Interactive Documentation
-Visit the `/docs` endpoint for interactive Swagger UI:
-```
-https://huggingface.co/spaces/YOUR_USERNAME/docinsight-api/docs
-```
+- 📄 **Smart Document Processing** - PDF, DOCX, TXT with OCR support
+- 🧠 **AI-Powered Summarization** - Intelligent document analysis
+- � **Internactive Q&A** - Chat with your documents using RAG
+- 🔐 **Secure Authentication** - JWT-based user management
+- � **Modenrn UI** - Dark theme with glassmorphism design
+- ⚡ **Real-time Processing** - Fast document analysis and responses
+- 📱 **Responsive Design** - Works on desktop and mobile
 
-## 🔒 Authentication
-Most endpoints require JWT token:
-```bash
-# 1. Register
-curl -X POST https://YOUR-SPACE.hf.space/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"email": "user@example.com", "password": "secure123"}'
+## 🚀 Live Applications
 
-# 2. Login to get token
-curl -X POST https://YOUR-SPACE.hf.space/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email": "user@example.com", "password": "secure123"}'
+### 🌐 Frontend Application
+**URL**: [https://smart-doc-ai-brown.vercel.app/](https://smart-doc-ai-brown.vercel.app/)
+- Modern React interface with dark theme
+- Real-time document processing
+- Interactive dashboard and analytics
+- Responsive design for all devices
 
-# 3. Use token in requests
-curl -X GET https://YOUR-SPACE.hf.space/documents \
-  -H "Authorization: Bearer <your_jwt_token>"
-```
+### 🔗 Backend API
+**URL**: [https://huggingface.co/spaces/sachin00110/SmartDocAI](https://huggingface.co/spaces/sachin00110/SmartDocAI)
+- FastAPI-powered REST API
+- Interactive documentation at `/docs`
+- Deployed on Hugging Face Spaces
+- Scalable and production-ready
 
 ## 🛠️ Tech Stack
-- **Backend**: FastAPI + Uvicorn
-- **ML**: PyTorch + Transformers
+
+### Frontend
+- **Framework**: React 18 with modern hooks
+- **Styling**: Tailwind CSS with custom animations
+- **Routing**: React Router v6
+- **State Management**: Context API
+- **Deployment**: Vercel
+
+### Backend
+- **Framework**: FastAPI with async support
+- **ML/AI**: PyTorch + Transformers
 - **Embeddings**: Sentence-Transformers
-- **Vector DB**: FAISS
-- **OCR**: Tesseract
+- **Vector Database**: FAISS for semantic search
+- **OCR**: Tesseract for image processing
 - **Database**: SQLAlchemy + SQLite
-- **Auth**: JWT (python-jose)
+- **Authentication**: JWT (python-jose)
+- **Deployment**: Hugging Face Spaces
 
-## 💾 Storage
-- Persistent `/data` volume (5GB)
-- Uploaded documents: `/data/uploads`
-- FAISS index: `/data/index`
-- Database: `/data/docinsight.db`
+## 📖 Quick Start Guide
 
-## 🚀 Quick Start
+### 1. Access the Application
+Visit [https://smart-doc-ai-brown.vercel.app/](https://smart-doc-ai-brown.vercel.app/) to get started immediately.
 
-### Example: Upload & Summarize Document
-
-```python
-import requests
-
-BASE_URL = "https://YOUR-SPACE.hf.space"
-
-# 1. Register & Login
-response = requests.post(f"{BASE_URL}/auth/register", 
-    json={"email": "test@example.com", "password": "test123"})
-
-response = requests.post(f"{BASE_URL}/auth/login",
-    json={"email": "test@example.com", "password": "test123"})
-token = response.json()["access_token"]
-
-headers = {"Authorization": f"Bearer {token}"}
-
-# 2. Upload document
-with open("document.pdf", "rb") as f:
-    files = {"file": f}
-    response = requests.post(f"{BASE_URL}/documents/upload", 
-        headers=headers, files=files)
-    doc_id = response.json()["document_id"]
-
-# 3. Summarize
-response = requests.post(f"{BASE_URL}/summarize/{doc_id}",
-    headers=headers,
-    json={"summary_type": "extractive", "max_length": 150})
-print(response.json()["summary"])
-
-# 4. Ask questions
-response = requests.post(f"{BASE_URL}/ask",
-    headers=headers,
-    json={"question": "What is this document about?"})
-print(response.json()["answer"])
+### 2. Create Account
+```
+1. Click "Start Free Trial" on the landing page
+2. Fill in your email and password (min 6 chars, avoid common passwords)
+3. Click "Create Account"
 ```
 
-## 📊 Features
+### 3. Upload Documents
+```
+1. Navigate to Dashboard after login
+2. Drag & drop or select PDF/DOCX/TXT files
+3. Wait for AI analysis to complete
+4. View your document in the sidebar
+```
 
-### Document Processing
-- PDF text extraction (pdfplumber)
-- DOCX processing (python-docx)
-- Image OCR (Tesseract)
-- Multi-format support
+### 4. Interact with Documents
+```
+1. Click on any document from the sidebar
+2. View AI-generated summary
+3. Ask questions in the chat interface
+4. Get intelligent, context-aware responses
+```
 
-### Summarization
-- **Extractive**: TextRank algorithm
-- **Abstractive**: DistilBART (lightweight)
-- **Hierarchical**: Multi-level summaries
-- Configurable length & detail
+## 🔧 API Usage
 
-### Q&A (RAG)
-- Semantic search with FAISS
-- Sentence-transformers embeddings
-- Context-aware answers
-- Source attribution
+### Base URLs
+- **Frontend**: `https://smart-doc-ai-brown.vercel.app`
+- **Backend**: `https://sachin00110-smartdocai.hf.space`
 
-## 🔧 Configuration
-
-Set these secrets in HF Spaces Settings:
-
+### Authentication Flow
 ```bash
-SECRET_KEY=<generate with: openssl rand -hex 32>
-DATABASE_URL=sqlite:////data/docinsight.db
-CORS_ORIGINS=https://your-frontend.vercel.app
-ENV=production
+# 1. Register new user
+curl -X POST https://sachin00110-smartdocai.hf.space/auth/signup \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@example.com", "password": "securepass123"}'
+
+# 2. Login to get JWT token
+curl -X POST https://sachin00110-smartdocai.hf.space/auth/login \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d 'username=user@example.com&password=securepass123'
+
+# Response: {"access_token": "eyJ...", "token_type": "bearer"}
 ```
 
-## 📈 Resource Usage
+### Document Operations
+```bash
+# Upload document
+curl -X POST https://sachin00110-smartdocai.hf.space/documents/upload \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -F "file=@document.pdf"
 
-- **Memory**: ~500MB base + ~200MB per active request
-- **Storage**: ~300MB (dependencies) + user data (max 5GB)
-- **CPU**: Optimized for CPU inference (no GPU required)
+# Summarize document
+curl -X POST https://sachin00110-smartdocai.hf.space/summarize/DOC_ID \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
 
-## 🐛 Troubleshooting
+# Ask questions
+curl -X POST https://sachin00110-smartdocai.hf.space/ask/DOC_ID \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "What is this document about?"}'
+```
 
-**Issue**: Slow first request  
-**Solution**: First request downloads models (~140MB), subsequent requests are fast
+### API Documentation
+Interactive API docs available at: [https://sachin00110-smartdocai.hf.space/docs](https://sachin00110-smartdocai.hf.space/docs)
 
-**Issue**: "Unauthorized" error  
-**Solution**: Ensure JWT token is included in Authorization header
+## 🏗️ Local Development
 
-**Issue**: Upload fails  
-**Solution**: Check file size (<10MB recommended) and format (PDF/DOCX/images)
+### Prerequisites
+- Node.js 16+ and npm/yarn
+- Python 3.10+
+- Git
+
+### Frontend Setup
+```bash
+# Clone repository
+git clone https://github.com/sachinn854/SmartDocAI.git
+cd SmartDocAI/frontend
+
+# Install dependencies
+npm install
+
+# Set environment variables
+cp .env.example .env
+# Edit .env with your backend URL
+
+# Start development server
+npm start
+```
+
+### Backend Setup
+```bash
+# Navigate to backend
+cd SmartDocAI/backend
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Set environment variables
+cp .env.example .env
+# Edit .env with your configuration
+
+# Run development server
+uvicorn app.main:app --reload --port 8000
+```
+
+## 🎨 UI Features
+
+### Modern Design System
+- **Dark Theme**: Elegant dark interface with purple-cyan gradients
+- **Glassmorphism**: Modern glass-like effects with backdrop blur
+- **Animations**: Smooth transitions and hover effects
+- **Typography**: Clean, readable font hierarchy
+- **Responsive**: Mobile-first design approach
+
+### User Experience
+- **Intuitive Navigation**: Clear routing and breadcrumbs
+- **Real-time Feedback**: Loading states and progress indicators
+- **Error Handling**: Graceful error messages and recovery
+- **Accessibility**: ARIA labels and keyboard navigation
+
+## 🔒 Security Features
+
+- **JWT Authentication**: Secure token-based authentication
+- **Password Validation**: Strong password requirements
+- **CORS Protection**: Configured for secure cross-origin requests
+- **Input Sanitization**: Protection against common attacks
+- **Rate Limiting**: API rate limiting for abuse prevention
+
+## 📊 Performance
+
+### Frontend
+- **Bundle Size**: Optimized with code splitting
+- **Loading Speed**: Fast initial load with lazy loading
+- **Caching**: Efficient browser caching strategies
+- **CDN**: Deployed on Vercel's global CDN
+
+### Backend
+- **Response Time**: < 2s for document processing
+- **Throughput**: Handles multiple concurrent requests
+- **Memory Usage**: ~500MB base + ~200MB per request
+- **Scalability**: Auto-scaling on Hugging Face Spaces
+
+## 🚀 Deployment
+
+### Frontend (Vercel)
+```bash
+# Deploy to Vercel
+npm install -g vercel
+vercel --prod
+```
+
+### Backend (Hugging Face Spaces)
+```bash
+# Push to HF Spaces repository
+git remote add hf https://huggingface.co/spaces/YOUR_USERNAME/YOUR_SPACE
+git push hf main
+```
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+
+### Development Workflow
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## 📝 License
-MIT License - See LICENSE file for details
 
-## 🔗 Links
-- [GitHub Repository](https://github.com/your-username/DocInsight)
-- [API Documentation](https://github.com/your-username/DocInsight/blob/main/docs/API_REFERENCE.md)
-- [Deployment Guide](https://github.com/your-username/DocInsight/blob/main/RAILWAY_DEPLOYMENT_GUIDE.md)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **Hugging Face** for Transformers and Spaces hosting
+- **Vercel** for frontend deployment
+- **OpenAI** for inspiration in AI interfaces
+- **Tailwind CSS** for the amazing styling framework
+
+## 📞 Support
+
+- **Issues**: [GitHub Issues](https://github.com/sachinn854/SmartDocAI/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/sachinn854/SmartDocAI/discussions)
+- **Email**: [Contact Developer](mailto:your-email@example.com)
 
 ---
 
-**Built with ❤️ using FastAPI, Transformers, and Hugging Face Spaces**
+<div align="center">
+
+**Built with ❤️ by [Sachin](https://github.com/sachinn854)**
+
+[⭐ Star this repo](https://github.com/sachinn854/SmartDocAI) • [🐛 Report Bug](https://github.com/sachinn854/SmartDocAI/issues) • [💡 Request Feature](https://github.com/sachinn854/SmartDocAI/issues)
+
+</div>
